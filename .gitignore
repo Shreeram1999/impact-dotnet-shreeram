@@ -1,0 +1,102 @@
+# =========================
+# Build Results
+# =========================
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# Visual Studio Code Workspace
+*.code-workspace
+
+# =========================
+# NuGet
+# =========================
+*.nupkg
+*.snupkg
+packages/
+!packages/build/
+.nuget/packages/
+
+# =========================
+# Test Results
+# =========================
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# =========================
+# Publish Output
+# =========================
+publish/
+artifacts/
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# OS Generated Files
+# =========================
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# =========================
+# Environment Files
+# =========================
+.env
+.env.*
+
+# Keep sample env files
+!.env.example
+
+# =========================
+# Certificates & Secrets
+# =========================
+*.pfx
+*.snk
+secrets.json
+
+# =========================
+# Resharper
+# =========================
+_ReSharper*/
+*.DotSettings.user
+
+# =========================
+# Azure
+# =========================
+PublishProfiles/
+*.pubxml
+*.publishsettings
+
+# =========================
+# Temporary Files
+# =========================
+*.tmp
+*.temp
+*.cache
+
+# =========================
+# Generated Files
+# =========================
+Generated/
