@@ -1,0 +1,23 @@
+<Solution>
+  <Project Path="Day_1_Task_2.1/Day_1_Task_2.1.csproj" />
+  <Project Path="Day_1_Task_2.2/Day_1_Task_2.2.csproj" />
+  <Project Path="Day_1_Task_2.3/Day_1_Task_2.3.csproj" />
+  <Project Path="Day_2_Task_2.4/Day_2_Task_2.4.csproj" />
+  <Project Path="Day_2_Task_2.5/Day_2_Task_2.5.csproj" />
+  <Project Path="Day_2_Task_2.6/Day_2_Task_2.6.csproj" />
+  <Project Path="Day_2_Task_2.7/Day_2_Task_2.7.csproj" />
+  <Project Path="Day_3_Task_2.10/Day_3_Task_2.10.csproj" />
+  <Project Path="Day_3_Task_2.8/Day_3_Task_2.8.csproj" />
+  <Project Path="Day_3_Task_2.9/Day_3_Task_2.9.csproj" />
+  <Project Path="Day_4_Task_2.11/Day_4_Task_2.11.csproj" />
+  <Project Path="Day_4_Task_2.12/Day_4_Task_2.12.csproj" />
+  <Project Path="Day_4_Task_2.13/Day_4_Task_2.13.csproj" />
+  <Project Path="Day_5_Mini_Q4.Tests/Day_5_Mini_Q4.Tests.csproj" />
+  <Project Path="Day_5_Mini_Q4/Day_5_Mini_Q4.csproj" />
+  <Project Path="Day_5_Mini_Q5.Tests/Day_5_Mini_Q5.Tests.csproj" />
+  <Project Path="Day_5_Mini_Q5/Day_5_Mini_Q5.csproj" />
+  <Project Path="Day_5_Mini_Q6.Tests/Day_5_Mini_Q6.Tests.csproj" />
+  <Project Path="Day_5_Mini_Q6/Day_5_Mini_Q6.csproj" />
+  <Project Path="Day_5_Task_2.14.Tests/Day_5_Task_2.14.Tests.csproj" />
+  <Project Path="Day_5_Task_2.14/Day_5_Task_2.14.csproj" />
+</Solution>
