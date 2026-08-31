@@ -1,0 +1,161 @@
+@StudentApi_HostAddress = http://localhost:5095
+
+### Swagger UI (browse all of this interactively)
+GET {{StudentApi_HostAddress}}/swagger/index.html
+
+### --- Students ---
+
+### List all students (200)
+GET {{StudentApi_HostAddress}}/api/students
+Accept: application/json
+
+### Create a student (201 + Location header)
+POST {{StudentApi_HostAddress}}/api/students
+Content-Type: application/json
+
+{
+  "name": "Asha",
+  "age": 20,
+  "rollNumber": "R1",
+  "email": "asha@example.com",
+  "score": 82
+}
+
+### Create a second student, for search/list to have more than one row (201)
+POST {{StudentApi_HostAddress}}/api/students
+Content-Type: application/json
+
+{
+  "name": "Rohit",
+  "age": 21,
+  "rollNumber": "R2",
+  "email": "rohit@example.com",
+  "score": 64
+}
+
+### Create with a duplicate roll number (409 Conflict)
+POST {{StudentApi_HostAddress}}/api/students
+Content-Type: application/json
+
+{
+  "name": "Someone Else",
+  "age": 22,
+  "rollNumber": "R1",
+  "email": "someone@example.com",
+  "score": 50
+}
+
+### Create with an invalid age - outside 5-100 (400, automatic via [ApiController])
+POST {{StudentApi_HostAddress}}/api/students
+Content-Type: application/json
+
+{
+  "name": "Too Old",
+  "age": 200,
+  "rollNumber": "R3",
+  "email": "old@example.com",
+  "score": 50
+}
+
+### Create with an invalid email (400, automatic via [ApiController])
+POST {{StudentApi_HostAddress}}/api/students
+Content-Type: application/json
+
+{
+  "name": "Bad Email",
+  "age": 20,
+  "rollNumber": "R4",
+  "email": "not-an-email",
+  "score": 50
+}
+
+### Get by id (200)
+GET {{StudentApi_HostAddress}}/api/students/1
+Accept: application/json
+
+### Get by id - missing (404)
+GET {{StudentApi_HostAddress}}/api/students/999
+Accept: application/json
+
+### Search - hit
+GET {{StudentApi_HostAddress}}/api/students/search?name=ash
+Accept: application/json
+
+### Search - miss (empty list, still 200)
+GET {{StudentApi_HostAddress}}/api/students/search?name=zzz
+Accept: application/json
+
+### Search - empty query (returns everyone)
+GET {{StudentApi_HostAddress}}/api/students/search
+Accept: application/json
+
+### Grade - percentage (default strategy)
+GET {{StudentApi_HostAddress}}/api/students/1/grade
+Accept: application/json
+
+### Grade - GPA (swapped strategy via the same endpoint, no controller change)
+GET {{StudentApi_HostAddress}}/api/students/1/grade?scale=gpa
+Accept: application/json
+
+### Update a student (204)
+PUT {{StudentApi_HostAddress}}/api/students/1
+Content-Type: application/json
+
+{
+  "name": "Asha K",
+  "age": 21,
+  "rollNumber": "R1",
+  "email": "asha@example.com",
+  "score": 90
+}
+
+### Update - missing id (404)
+PUT {{StudentApi_HostAddress}}/api/students/999
+Content-Type: application/json
+
+{
+  "name": "Nobody",
+  "age": 20,
+  "rollNumber": "R9",
+  "email": "nobody@example.com",
+  "score": 0
+}
+
+### Delete a student (204)
+DELETE {{StudentApi_HostAddress}}/api/students/2
+
+### Delete - missing id (404)
+DELETE {{StudentApi_HostAddress}}/api/students/2
+
+### --- Teachers (stretch) ---
+
+### Create a teacher (201 + Location header)
+POST {{StudentApi_HostAddress}}/api/teachers
+Content-Type: application/json
+
+{
+  "name": "Dr. Iyer",
+  "email": "iyer@example.com",
+  "designation": "Professor"
+}
+
+### List all teachers (200)
+GET {{StudentApi_HostAddress}}/api/teachers
+Accept: application/json
+
+### Get by id - missing (404)
+GET {{StudentApi_HostAddress}}/api/teachers/999
+Accept: application/json
+
+### Update a teacher (204)
+PUT {{StudentApi_HostAddress}}/api/teachers/1
+Content-Type: application/json
+
+{
+  "name": "Dr. Iyer",
+  "email": "iyer@example.com",
+  "designation": "HOD"
+}
+
+### Delete a teacher (204)
+DELETE {{StudentApi_HostAddress}}/api/teachers/1
