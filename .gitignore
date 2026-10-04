@@ -100,3 +100,10 @@ PublishProfiles/
 # Generated Files
 # =========================
 Generated/
+
+# =========================
+# Node / React (Week 8+)
+# =========================
+node_modules/
+dist/
+coverage/
