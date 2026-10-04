@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="SecureFileVault.Tests/SecureFileVault.Tests.csproj" />
+  <Project Path="SecureFileVault/SecureFileVault.csproj" />
+  <Project Path="StudentApi.Tests/StudentApi.Tests.csproj" />
+  <Project Path="StudentApi/StudentApi.csproj" />
+</Solution>
