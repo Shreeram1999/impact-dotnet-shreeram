@@ -1,0 +1,118 @@
+# Task 10.6 - the whole portal with one command:
+#   docker compose up --build
+# then open http://localhost:3000 (React) - it talks only to the gateway on
+# http://localhost:8080. Fixed service names/URLs; no Kubernetes, no mesh.
+#
+#   web (nginx, :3000) --> gateway (YARP, :8080) --> identity  --> StudentPortal_Identity   (ADO.NET)
+#                                                --> academics --> StudentPortal_Academics  (EF Code First)
+#                                                --> reporting --> StudentPortal_Reporting  (EF DB First)
+#   One SQL Server container hosts the three databases. Each service has its
+#   own database and connection string, and no service connects to another's.
+#
+# Secrets: SA_PASSWORD and JWT_KEY fall back to development defaults. Set
+# them in a .env file (git-ignored) for anything beyond a local demo.
+
+name: student-portal
+
+x-jwt: &jwt
+  Jwt__Key: ${JWT_KEY:-dev-only-signing-key-change-me-0123456789-abcdefghijklmnop}
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD:-Portal_Dev_Passw0rd!}
+    ports:
+      - "14333:1433"          # optional: browse the three databases from SSMS
+    volumes:
+      - sqldata:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$${MSSQL_SA_PASSWORD}\" -C -Q \"SELECT 1\" -b -o /dev/null"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+  db-init:
+    image: mcr.microsoft.com/mssql/server:2022-latest   # reused for its sqlcmd
+    entrypoint: ["/bin/bash", "/db-init.sh"]
+    environment:
+      SA_PASSWORD: ${SA_PASSWORD:-Portal_Dev_Passw0rd!}
+    volumes:
+      - ./docker/db-init.sh:/db-init.sh:ro
+      - ./Identity/Identity.Api/Database:/scripts/identity:ro
+      - ./Reporting/Reporting.Api/Database:/scripts/reporting:ro
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    restart: "no"
+
+  identity:
+    build:
+      context: .
+      dockerfile: docker/dotnet-service.Dockerfile
+      args: { SERVICE: Identity, PROJECT: Identity.Api }
+    environment:
+      <<: *jwt
+      ConnectionStrings__IdentityDb: "Server=sqlserver;Database=StudentPortal_Identity;User Id=sa;Password=${SA_PASSWORD:-Portal_Dev_Passw0rd!};TrustServerCertificate=True"
+      Registration__AllowTeacherSelfRegistration: "false"
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+
+  academics:
+    build:
+      context: .
+      dockerfile: docker/dotnet-service.Dockerfile
+      args: { SERVICE: Academics, PROJECT: Academics.Api }
+    environment:
+      <<: *jwt
+      ConnectionStrings__AcademicsDb: "Server=sqlserver;Database=StudentPortal_Academics;User Id=sa;Password=${SA_PASSWORD:-Portal_Dev_Passw0rd!};TrustServerCertificate=True"
+      Database__MigrateOnStartup: "true"      # EF Code First owns this schema
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
+  reporting:
+    build:
+      context: .
+      dockerfile: docker/dotnet-service.Dockerfile
+      args: { SERVICE: Reporting, PROJECT: Reporting.Api }
+    environment:
+      <<: *jwt
+      ConnectionStrings__ReportingDb: "Server=sqlserver;Database=StudentPortal_Reporting;User Id=sa;Password=${SA_PASSWORD:-Portal_Dev_Passw0rd!};TrustServerCertificate=True"
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+
+  gateway:
+    build:
+      context: .
+      dockerfile: docker/dotnet-service.Dockerfile
+      args: { SERVICE: Gateway, PROJECT: Gateway.Api }
+    environment:
+      <<: *jwt
+      ReverseProxy__Clusters__identity__Destinations__d1__Address: http://identity:8080/
+      ReverseProxy__Clusters__academics__Destinations__d1__Address: http://academics:8080/
+      ReverseProxy__Clusters__reporting__Destinations__d1__Address: http://reporting:8080/
+      Cors__AllowedOrigins__0: http://localhost:3000
+    ports:
+      - "8080:8080"           # the ONLY API port published to the host
+    depends_on:
+      - identity
+      - academics
+      - reporting
+
+  web:
+    build:
+      context: ./web/student-portal-web
+      args:
+        VITE_API_BASE_URL: http://localhost:8080   # the browser calls the gateway
+    ports:
+      - "3000:80"
+    depends_on:
+      - gateway
+
+volumes:
+  sqldata:

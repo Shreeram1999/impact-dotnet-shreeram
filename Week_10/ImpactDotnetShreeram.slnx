@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/Shared/">
+    <Project Path="Shared/StudentPortal.Shared/StudentPortal.Shared.csproj" />
+  </Folder>
+  <Folder Name="/Identity/">
+    <Project Path="Identity/Identity.Api/Identity.Api.csproj" />
+    <Project Path="Identity/Identity.Tests/Identity.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Academics/">
+    <Project Path="Academics/Academics.Api/Academics.Api.csproj" />
+    <Project Path="Academics/Academics.Tests/Academics.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Reporting/">
+    <Project Path="Reporting/Reporting.Api/Reporting.Api.csproj" />
+    <Project Path="Reporting/Reporting.Tests/Reporting.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Gateway/">
+    <Project Path="Gateway/Gateway.Api/Gateway.Api.csproj" />
+    <Project Path="Gateway/Gateway.Tests/Gateway.Tests.csproj" />
+  </Folder>
+  <Folder Name="/e2e/">
+    <Project Path="e2e/StudentPortal.E2E/StudentPortal.E2E.csproj" />
+  </Folder>
+</Solution>
