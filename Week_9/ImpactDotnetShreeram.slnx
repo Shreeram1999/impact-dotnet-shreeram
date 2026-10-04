@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="StudentApi.Tests/StudentApi.Tests.csproj" />
+  <Project Path="StudentApi/StudentApi.csproj" />
+  <Project Path="StudentPortal.E2E/StudentPortal.E2E.csproj" />
+</Solution>
